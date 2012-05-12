@@ -1,6 +1,6 @@
 name = Twitter's Bootstrap
 description = Drupal implementation of Twitter's Bootstrap
-core = 6.x
+core = 7.x
 engine = phptemplate
 
 ; Add bootstrap stylesheet.
