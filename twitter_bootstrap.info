@@ -17,6 +17,7 @@ stylesheets[all][] = user.css
 
 ; Add bootstrip javascript.
 scripts[] = js/bootstrap.min.js
+scripts[] = js/bootstrap-drupal.js
 
 ; Define regions
 regions[content] = Content
