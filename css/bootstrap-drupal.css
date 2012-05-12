@@ -1,0 +1,75 @@
+/*
+ * Drupal specific fixes to the bootstrap CSS.
+ */
+
+/* Fix position of fixed navigation bar. */
+body.admin-menu .navbar-fixed-top {
+    top: 26px;
+}
+.navbar-fixed-top, .navbar-fixed-bottom {
+    z-index: 900;
+}
+
+/* Fix margins. */
+.accordion-group:last-child {
+    margin: 0 0 18px;
+}
+
+/* Fix body padding for navigation bar. */
+body {
+    padding-top: 56px;
+}
+body.admin-menu {
+    padding-top: 76px;
+}
+
+/* Fix for inline forms. */
+.form-inline .control-group,
+.form-inline btn {
+    display: inline-block;
+    *display: inline;
+    margin-bottom: 0;
+    *zoom: 1;
+}
+
+/* Horizontal lists. */
+ul.horizontal li {
+    float: left;
+    margin-right: 20px;
+}
+
+/* Inline filters. */
+.filter-inline .control-group label.radio {
+    line-height: 28px;
+    padding-top: 0;
+}
+.filter-inline .control-group label.radio .form-radio {
+    margin-top: 7px;
+}
+.filter-inline .control-group select {
+    margin-bottom: 0;
+}
+.filter-inline li.binder {
+    line-height: 28px;
+}
+
+/* Node admin nodes. */
+.table-multiselect label.radio,
+.table-multiselect label.checkbox {
+    padding-top: 0;
+}
+
+/* Password strength. */
+.password-strength {
+    display: block;
+    color: #555555;
+}
+.password-result.warning {
+    color: #f89406;
+}
+.password-result.error {
+    color: #b94a48;
+}
+.password-result.ok {
+    color: #468847;
+}

@@ -1,0 +1,34 @@
+name = Twitter's Bootstrap
+description = Drupal implementation of Twitter's Bootstrap
+core = 6.x
+engine = phptemplate
+
+; Add bootstrap stylesheet.
+stylesheets[all][] = css/bootstrap.min.css
+stylesheets[all][] = css/bootstrap-responsive.min.css
+stylesheets[all][] = css/bootstrap-drupal.css
+
+; Unset all system stylesheets.
+stylesheets[all][] = node.css
+stylesheets[all][] = defaults.css
+stylesheets[all][] = system.css
+stylesheets[all][] = system-menus.css
+stylesheets[all][] = user.css
+
+; Add bootstrip javascript.
+scripts[] = js/bootstrap.min.js
+
+; Define regions
+regions[content] = Content
+regions[left] = Left sidebar
+regions[right] = Right sidebar
+;regions[header] = Header
+;regions[footer] = Footer
+
+; Define features
+features[] = logo
+features[] = name
+features[] = slogan
+features[] = mission
+features[] = search
+features[] = primary_links
