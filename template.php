@@ -307,17 +307,118 @@ function twitter_bootstrap_checkbox($element)
 }
 
 /**
+ * Theme a URL field.
+ *
+ * @param array $element
+ *     The URL field element.
+ *
+ * @return string
+ *     The rendered URL field element.
+ */
+function twitter_bootstrap_urlfield($element) {
+    if (!isset($element['#field_prefix'])) {
+        $element['#field_prefix'] = '<i class="icon-globe"></i>';
+    }
+
+    return twitter_bootstrap_textfield($element, 'url');
+}
+
+/**
+ * Theme a search field.
+ *
+ * @param array $element
+ *     The search text field element.
+ *
+ * @return string
+ *     The rendered search text field element.
+ */
+function twitter_bootstrap_searchfield($element) {
+    if (!isset($element['#field_prefix'])) {
+        $element['#field_prefix'] = '<i class="icon-search"></i>';
+    }
+
+    return twitter_bootstrap_textfield($element, 'search');
+}
+
+/**
+ * Theme a telephone number field.
+ *
+ * @param array $element
+ *     The telephone number field element.
+ *
+ * @return string
+ *     The rendered telephone number field element.
+ */
+function twitter_bootstrap_telfield($element) {
+    return twitter_bootstrap_textfield($element, 'tel');
+}
+
+/**
+ * Theme an e-mail field.
+ *
+ * @param array $element
+ *     The e-mail field element.
+ *
+ * @return string
+ *     The rendered e-mail field element.
+ */
+function twitter_bootstrap_emailfield($element) {
+    return twitter_bootstrap_textfield($element, 'email');
+}
+
+/**
+ * Theme a number field.
+ *
+ * @param array $element
+ *     The number field element.
+ *
+ * @return string
+ *     The rendered number field element.
+ */
+function twitter_bootstrap_numberfield($element) {
+    foreach (array('min', 'max', 'step') as $attribute) {
+        if (isset($element['#'.$attribute]) && !isset($element['#attributes'][$attribute])) {
+            $element['#attributes'][$attribute] = $element['#'.$attribute];
+        }
+    }
+    return twitter_bootstrap_textfield($element, 'number');
+}
+
+/**
+ * Theme a number range field.
+ *
+ * @param array $element
+ *     The number range field element.
+ *
+ * @return string
+ *     The rendered number range field element.
+ */
+function twitter_bootstrap_rangefield($element) {
+    foreach (array('min', 'max', 'step') as $attribute) {
+        if (isset($element['#'.$attribute]) && !isset($element['#attributes'][$attribute])) {
+            $element['#attributes'][$attribute] = $element['#'.$attribute];
+        }
+    }
+    return twitter_bootstrap_textfield($element, 'range');
+}
+
+/**
  * Theme a text input.
  *
  * @param array $element
  *     The text element.
+ * @param string $type
+ *     The type of text field (to support HTML5 special text fields)
  *
  * @return string
  *     The rendered text element.
  */
-function twitter_bootstrap_textfield($element)
+function twitter_bootstrap_textfield($element, $type = 'text')
 {
     $class = array('form-text');
+    if ($type != 'text') {
+        $class[] = 'form-'.$type;
+    }
     $size = empty($element['#size']) ? 60 : $element['#size'];
     $class[] = 'span' . ceil($size / 15);
     $extra = '';
@@ -341,9 +442,14 @@ function twitter_bootstrap_textfield($element)
         $output .= '<div class="input-append">';
     }
 
-    $output .= '<input type="text"';
+    $output .= '<input';
+    $output .= ' type="' . $type . '"';
     if (!empty($element['#maxlength'])) {
-        $output .= ' maxlenght="' . $element['#maxlength'] . '"';
+        $output .= ' maxlength="' . $element['#maxlength'] . '"';
+    }
+    // Placeholder text
+    if (!empty($element['#placeholder'])) {
+        $output .= ' placeholder="' . $element['#placeholder'] . '"';
     }
     $output .= ' name="' . $element['#name'] . '"';
     $output .= ' id="' . $element['#id'] . '"';
