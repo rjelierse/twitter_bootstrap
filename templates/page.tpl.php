@@ -43,20 +43,20 @@
         <div class="row">
             <?php if (!empty($page['left'])): ?>
             <div class="span3" id="sidebar-left">
-                <?php render($page['left']); ?>
+                <?php echo render($page['left']); ?>
             </div>
             <?php endif; ?>
 
             <div class="<?php echo $content_class; ?>">
                 <?php if (!empty($tabs)): ?>
                 <!--: Tabbed navigation :-->
-                <?php render($tabs); ?>
+                <?php echo render($tabs); ?>
                 <?php endif; ?>
 
                 <?php if (!empty($page['help'])): ?>
                 <!--: Help text :-->
                 <div class="well help">
-                    <?php render($page['help']); ?>
+                    <?php echo render($page['help']); ?>
                 </div>
                 <?php endif; ?>
 
@@ -70,7 +70,7 @@
 
             <?php if (!empty($page['right'])): ?>
             <div class="span3" id="sidebar-right">
-                <?php render($page['right']); ?>
+                <?php echo render($page['right']); ?>
             </div>
             <?php endif; ?>
         </div>
