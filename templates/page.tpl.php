@@ -17,23 +17,15 @@
                 </a>
 
                 <!--: Navigation links :-->
-                <?php if (!empty($primary_links)): ?>
-                <?php echo theme('links', $primary_links, array('class' => 'nav primary-links')); ?>
-                <?php endif; ?>
-
-                <!--: Search form :-->
-                <?php if (!empty($search_box)): ?>
-                <?php echo $search_box; ?>
+                <?php if (!empty($main_menu)): ?>
+                <?php echo theme('links', array('links' => $main_menu, 'attributes' => array('class' => 'nav'))); ?>
                 <?php endif; ?>
 
                 <ul class="nav pull-right">
-                    <?php if ($logged_in): ?>
+                    <?php if ($logged_in && !empty($secondary_menu)): ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><?php echo $user->name; ?><b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><?php echo l(t('My profile'), 'user'); ?></li>
-                            <li><?php echo l(t('Log out'), 'logout'); ?></li>
-                        </ul>
+                        <?php echo theme('links', array('links' => $secondary_menu, 'attributes' => array('class' => 'dropdown-menu'))); ?>
                     </li>
                     <?php else: ?>
                     <li><?php echo l(t('Log in'), 'user'); ?></li>
