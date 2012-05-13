@@ -3,6 +3,8 @@
  * Bootstrap template functions.
  */
 
+require_once dirname(__FILE__).'/template.form.inc';
+
 /**
  * Add theme hooks for the bootstrap theme.
  *
@@ -46,470 +48,22 @@ function twitter_bootstrap_preprocess_page(&$variables)
     }
 }
 
-/**
- * @param $element
- *     The fieldset element.
- *
- * @return string
- *     The rendered fieldset element.
- */
-function twitter_bootstrap_fieldset($element)
-{
-    static $counter = 0;
-
-    // Set fieldset ID.
-    if (isset($element['#group']) && !empty($element['#group'])) {
-        $element['#collapsed'] = ($counter === 0) ? false : true;
-        $id = 'fieldset-' . $element['#group'] . '-' . $counter++;
-    }
-    else {
-        $id = 'fieldset-' . $counter++;
-    }
-
-    // Fieldset classes.
-    if (isset($element['#attributes']['class'])) {
-        $element['#attributes']['class'] = 'accordion-group ' . $element['#attributes']['class'];
-    }
-    else {
-        $element['#attributes']['class'] = 'accordion-group';
-    }
-
-    $fieldset_content = isset($element['#children']) ? $element['#children'] . $element['#value'] : $element['#value'];
-
-    $content = '<div' . drupal_attributes($element['#attributes']) . '>';
-    if (!empty($element['#title'])) {
-        $content .= twitter_bootstrap_fieldset_title($id, $element['#title'], !empty($element['#collapsible']), isset($element['#group']) ? $element['#group'] : '');
-    }
-    $content .= twitter_bootstrap_fieldset_body($id, $fieldset_content, !empty($element['#collapsible']), !empty($element['#collapsed']));
-    $content .= "</div>\n";
-
-    return $content;
-}
-
-/**
- * @param string $id
- *     Fieldset body identifier.
- * @param string $label
- *     Label to use as the title.
- * @param bool $collapsible
- *     (optional) If the fieldset is collapsible.
- * @param string $group
- *     (optional) The identifier of the accordeon group, of false if not part of an accordeon.
- *
- * @return string
- *     The rendered fieldset title.
- */
-function twitter_bootstrap_fieldset_title($id, $label, $collapsible = false, $group = '')
-{
-    $attributes = array(
-        'class' => 'accordion-heading'
-    );
-
-    $link_attributes = array(
-        'class' => 'accordion-toggle'
-    );
-
-    if ($collapsible) {
-        $link_attributes['href'] = '#' . $id;
-        $link_attributes['data-toggle'] = 'collapse';
-    }
-
-    if ($collapsible && !empty($group)) {
-        $link_attributes['data-parent'] = '#' . $group;
-    }
-
-    $label = '<a' . drupal_attributes($link_attributes) . '>' . $label . '</a>';
-
-    return '<div' . drupal_attributes($attributes) . '>' . $label . '</div>';
-}
-
-/**
- * @param $id
- *     Fieldset body identifier.
- * @param $content
- *     Fieldset content.
- * @param bool $collapsible
- *     (optional) If the fieldset is collapsible.
- * @param bool $collapsed
- *     (optional) If the fieldset is collapsed by default.
- *
- * @return string
- *     The rendered fieldset body.
- */
-function twitter_bootstrap_fieldset_body($id, $content, $collapsible = false, $collapsed = false)
-{
-    $attributes = array(
-        'id' => $id,
-        'class' => 'accordion-body'
-    );
-
-    if ($collapsible) {
-        $attributes['class'] .= ' collapse';
-    }
-
-    if ($collapsible && !$collapsed) {
-        $attributes['class'] .= ' in';
-    }
-
-    return '<div' . drupal_attributes($attributes) . '><div class="accordion-inner">' . $content . '</div></div>';
-}
-
-/**
- * Build the local tasks for the current page.
- *
- * @return string
- *     The rendered task lists.
- */
-function twitter_bootstrap_menu_local_tasks()
+function twitter_bootstrap_menu_local_tasks(&$variables)
 {
     $output = '';
 
-    $primary = menu_primary_local_tasks();
-    if (!empty($primary)) {
-        $output .= implode("\n", array('<ul class="nav nav-tabs nav-tabs-primary">', $primary, '</ul>'));
+    if (!empty($variables['primary'])) {
+        $variables['primary']['#prefix'] = '<ul class="nav nav-tabs nav-tabs-primary">';
+        $variables['primary']['#suffix'] = '</ul>';
+        $output .= drupal_render($variables['primary']);
     }
 
-    $secondary = menu_secondary_local_tasks();
-    if (!empty($secondary)) {
-        $output .= implode("\n", array('<ul class="nav nav-pills nav-pills-secondary">', $secondary, '</ul>'));
+    if (!empty($variables['secondary'])) {
+        $variables['secondary']['#prefix'] = '<ul class="nav nav-pills nav-pills-secondary">';
+        $variables['secondary']['#suffix'] = '</ul>';
+        $output .= drupal_render($variables['secondary']);
     }
 
-    return $output;
-}
-
-/**
- * Theme a form button.
- *
- * @param array $element
- *     The button element.
- *
- * @return string
- *     The rendered button element.
- */
-function twitter_bootstrap_button($element)
-{
-    // Set button type.
-    if (isset($element['#attributes']['class'])) {
-        $element['#attributes']['class'] = 'form-' . $element['#button_type'] . ' ' . $element['#attributes']['class'];
-    }
-    else {
-        $element['#attributes']['class'] = 'form-' . $element['#button_type'];
-    }
-
-    // Set button as such.
-    $element['#attributes']['class'] .= ' btn';
-
-    // Build HTML.
-    $button = '<button type="submit"';
-    if (!empty($element['#name'])) {
-        $button .= ' name="' . $element['#name'] . '"';
-    }
-    $button .= ' id="' . $element['#id'] . '"';
-    $button .= drupal_attributes($element['#attributes']);
-    $button .= '>';
-    $button .= check_plain($element['#value']);
-    $button .= "</button>\n";
-
-    return $button;
-}
-
-/**
- * Theme a form image button.
- *
- * @param array $element
- *     The button element.
- *
- * @return string
- *     The rendered button element.
- */
-function twitter_bootstrap_image_button($element)
-{
-    // Set button type.
-    if (isset($element['#attributes']['class'])) {
-        $element['#attributes']['class'] = 'form-' . $element['#button_type'] . ' ' . $element['#attributes']['class'];
-    }
-    else {
-        $element['#attributes']['class'] = 'form-' . $element['#button_type'];
-    }
-
-    // Set button as such.
-    $element['#attributes']['class'] .= ' btn';
-
-    // Build HTML.
-    $button = '<button type="submit"';
-    if (!empty($element['#name'])) {
-        $button .= ' name="' . $element['#name'] . '"';
-    }
-    $button .= ' id="' . $element['#id'] . '"';
-    $button .= drupal_attributes($element['#attributes']);
-    $button .= '>';
-    $button .= '<img src="' . base_path() . $element['#src'] . '"';
-    if (!empty($element['#value'])) {
-        $button .= ' alt="' . check_plain($element['#value']) . '"';
-    }
-    $button .= "></button>\n";
-
-    return $button;
-}
-
-/**
- * Theme a radio input.
- *
- * @param array $element
- *     The radio element.
- *
- * @return string
- *     The rendered radio element.
- */
-function twitter_bootstrap_radio($element)
-{
-    _form_set_class($element, array('form-radio'));
-    $output = '<input type="radio" ';
-    $output .= 'id="' . $element['#id'] . '" ';
-    $output .= 'name="' . $element['#name'] . '" ';
-    $output .= 'value="' . $element['#return_value'] . '" ';
-    $output .= (check_plain($element['#value']) == $element['#return_value']) ? ' checked="checked" ' : ' ';
-    $output .= drupal_attributes($element['#attributes']) . ' />';
-
-    if (!is_null($element['#title'])) {
-        $output = '<label class="radio option" for="' . $element['#id'] . '">' . $output . ' ' . $element['#title'] . '</label>';
-    }
-
-    unset($element['#title']);
-    return theme('form_element', $element, $output);
-}
-
-/**
- * Theme a checkbox input.
- *
- * @param array $element
- *     The checkbox element.
- *
- * @return string
- *     The rendered checkbox element.
- */
-function twitter_bootstrap_checkbox($element)
-{
-    _form_set_class($element, array('form-checkbox'));
-    $output = '<input type="checkbox" ';
-    $output .= 'id="' . $element['#id'] . '" ';
-    $output .= 'name="' . $element['#name'] . '" ';
-    $output .= 'value="' . $element['#return_value'] . '" ';
-    $output .= $element['#value'] ? ' checked="checked" ' : ' ';
-    $output .= drupal_attributes($element['#attributes']) . ' />';
-
-    if (!is_null($element['#title'])) {
-        $output = '<label class="checkbox option" for="' . $element['#id'] . '">' . $output . ' ' . $element['#title'] . '</label>';
-    }
-
-    unset($element['#title']);
-    return theme('form_element', $element, $output);
-}
-
-/**
- * Theme a URL field.
- *
- * @param array $element
- *     The URL field element.
- *
- * @return string
- *     The rendered URL field element.
- */
-function twitter_bootstrap_urlfield($element) {
-    if (!isset($element['#field_prefix'])) {
-        $element['#field_prefix'] = '<i class="icon-globe"></i>';
-    }
-
-    return twitter_bootstrap_textfield($element, 'url');
-}
-
-/**
- * Theme a search field.
- *
- * @param array $element
- *     The search text field element.
- *
- * @return string
- *     The rendered search text field element.
- */
-function twitter_bootstrap_searchfield($element) {
-    if (!isset($element['#field_prefix'])) {
-        $element['#field_prefix'] = '<i class="icon-search"></i>';
-    }
-
-    return twitter_bootstrap_textfield($element, 'search');
-}
-
-/**
- * Theme a telephone number field.
- *
- * @param array $element
- *     The telephone number field element.
- *
- * @return string
- *     The rendered telephone number field element.
- */
-function twitter_bootstrap_telfield($element) {
-    return twitter_bootstrap_textfield($element, 'tel');
-}
-
-/**
- * Theme an e-mail field.
- *
- * @param array $element
- *     The e-mail field element.
- *
- * @return string
- *     The rendered e-mail field element.
- */
-function twitter_bootstrap_emailfield($element) {
-    return twitter_bootstrap_textfield($element, 'email');
-}
-
-/**
- * Theme a number field.
- *
- * @param array $element
- *     The number field element.
- *
- * @return string
- *     The rendered number field element.
- */
-function twitter_bootstrap_numberfield($element) {
-    foreach (array('min', 'max', 'step') as $attribute) {
-        if (isset($element['#'.$attribute]) && !isset($element['#attributes'][$attribute])) {
-            $element['#attributes'][$attribute] = $element['#'.$attribute];
-        }
-    }
-    return twitter_bootstrap_textfield($element, 'number');
-}
-
-/**
- * Theme a number range field.
- *
- * @param array $element
- *     The number range field element.
- *
- * @return string
- *     The rendered number range field element.
- */
-function twitter_bootstrap_rangefield($element) {
-    foreach (array('min', 'max', 'step') as $attribute) {
-        if (isset($element['#'.$attribute]) && !isset($element['#attributes'][$attribute])) {
-            $element['#attributes'][$attribute] = $element['#'.$attribute];
-        }
-    }
-    return twitter_bootstrap_textfield($element, 'range');
-}
-
-/**
- * Theme a text input.
- *
- * @param array $element
- *     The text element.
- * @param string $type
- *     The type of text field (to support HTML5 special text fields)
- *
- * @return string
- *     The rendered text element.
- */
-function twitter_bootstrap_textfield($element, $type = 'text')
-{
-    $class = array('form-text');
-    if ($type != 'text') {
-        $class[] = 'form-'.$type;
-    }
-    $size = empty($element['#size']) ? 60 : $element['#size'];
-    $class[] = 'span' . ceil($size / 15);
-    $extra = '';
-    $output = '';
-
-    if ($element['#autocomplete_path'] && menu_valid_path(array('link_path' => $element['#autocomplete_path']))) {
-        drupal_add_js('misc/autocomplete.js');
-        $class[] = 'form-autocomplete';
-        $extra = '<input class="autocomplete" type="hidden" id="' . $element['#id'] . '-autocomplete" value="' . check_url(url($element['#autocomplete_path'], array('absolute' => TRUE))) . '" disabled="disabled" />';
-    }
-
-    _form_set_class($element, $class);
-
-    // Field prefix
-    if (isset($element['#field_prefix'])) {
-        $output .= '<div class="input-prepend">';
-        $output .= '<span class="add-on">' . $element['#field_prefix'] . '</span>';
-    }
-    // Field suffix
-    elseif (isset($element['#field_suffix'])) {
-        $output .= '<div class="input-append">';
-    }
-
-    $output .= '<input';
-    $output .= ' type="' . $type . '"';
-    if (!empty($element['#maxlength'])) {
-        $output .= ' maxlength="' . $element['#maxlength'] . '"';
-    }
-    // Placeholder text
-    if (!empty($element['#placeholder'])) {
-        $output .= ' placeholder="' . $element['#placeholder'] . '"';
-    }
-    $output .= ' name="' . $element['#name'] . '"';
-    $output .= ' id="' . $element['#id'] . '"';
-    $output .= ' value="' . check_plain($element['#value']) . '"';
-    $output .= drupal_attributes($element['#attributes']);
-    $output .= '>';
-
-    // Field prefix
-    if (isset($element['#field_prefix'])) {
-        $output .= '</div>';
-    }
-    // Field suffix
-    elseif (isset($element['#field_suffix'])) {
-        $output .= '<span class="add-on">' . $element['#field_suffix'] . '</span>';
-        $output .= '</div>';
-    }
-
-    return theme('form_element', $element, $output) . $extra;
-}
-
-/**
- * Theme a form control.
- *
- * @param array $element
- *     The form element.
- * @param string $value
- *     The form control.
- *
- * @return string
- *     The rendered form control.
- */
-function twitter_bootstrap_form_element($element, $value)
-{
-    // Control wrapper
-    $output = '<div class="control-group"';
-    if (!empty($element['#id'])) {
-        $output .= ' id="' . $element['#id'] . '-wrapper"';
-    }
-    $output .= ">\n";
-
-    // Control label
-    if (!empty($element['#title'])) {
-        $output .= '<label class="control-label"';
-        if (!empty($element['#id'])) {
-            $output .= ' for="' . $element['#id'] . '"';
-        }
-        $output .= '>';
-        $output .= $element['#title'];
-        $output .= "</label>\n";
-    }
-
-    // Control
-    $output .= '<div class="controls">';
-    $output .= $value;
-    if (!empty($element['#description'])) {
-        $output .= '<p class="help-block">' . $element['#description'] . '</p>';
-    }
-    $output .= "</div>\n";
-
-    $output .= "</div>\n";
     return $output;
 }
 
@@ -531,15 +85,17 @@ function twitter_bootstrap_system_settings_form($form)
 /**
  * Theme the system messages.
  *
- * @param string $type
+ * @param array $variables
  *     (optional) The type of messages to display.
  *
  * @return string
  *     The rendered system messages.
  */
-function twitter_bootstrap_status_messages($type = '')
+function twitter_bootstrap_status_messages($variables)
 {
     $output = '';
+    $type = $variables['display'];
+
     foreach (drupal_get_messages($type) as $message_type => $messages) {
         // Set message class
         switch ($message_type) {
@@ -974,7 +530,7 @@ function twitter_bootstrap_system_modules($form)
 
     $output .= '</div>';
 
-    $output .= '<div class="form-actions">'.drupal_render($form['buttons']).'</div>';
+    $output .= '<div class="form-actions">' . drupal_render($form['buttons']) . '</div>';
 
     $output .= drupal_render($form);
     return $output;

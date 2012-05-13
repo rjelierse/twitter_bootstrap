@@ -1,17 +1,8 @@
 <?php
 /**
- * Bootstrap theme: page template.
+ * Bootstrap page template.
  */
-?><!DOCTYPE html>
-<html lang="<?php echo $language->language; ?>" dir="<?php echo $language->dir; ?>">
-<head>
-    <?php echo $head; ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $head_title; ?></title>
-    <?php echo $styles; ?>
-    <?php echo $scripts; ?>
-</head>
-<body data-spy="scroll" data-target=".subnav" data-offset="50" class="<?php echo $body_classes; ?>">
+?>
     <!--= Navigation bar =-->
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -53,47 +44,42 @@
     </div>
 
     <!--= Container =-->
-    <div class="container">
+    <div class="container" id="site-wrapper">
         <header class="page-header">
             <h1><?php echo $title; ?></h1>
         </header>
         <div class="row">
-            <?php if (!empty($left)): ?>
+            <?php if (!empty($page['left'])): ?>
             <div class="span3" id="sidebar-left">
-                <?php echo $left; ?>
+                <?php render($page['left']); ?>
             </div>
             <?php endif; ?>
 
             <div class="<?php echo $content_class; ?>">
                 <?php if (!empty($tabs)): ?>
                 <!--: Tabbed navigation :-->
-                <?php echo $tabs; ?>
+                <?php render($tabs); ?>
                 <?php endif; ?>
 
-                <?php if (!empty($help)): ?>
+                <?php if (!empty($page['help'])): ?>
                 <!--: Help text :-->
                 <div class="well help">
-                    <?php echo $help; ?>
+                    <?php render($page['help']); ?>
                 </div>
                 <?php endif; ?>
 
-                <?php if (!empty($messages)): ?>
+                <?php if ($show_messages): ?>
                 <!--: Drupal messages :-->
                 <?php echo $messages; ?>
                 <?php endif; ?>
 
-                <?php echo $content; ?>
+                <?php echo render($page['content']); ?>
             </div>
 
-            <?php if (!empty($right)): ?>
+            <?php if (!empty($page['right'])): ?>
             <div class="span3" id="sidebar-right">
-                <?php echo $right; ?>
+                <?php render($page['right']); ?>
             </div>
             <?php endif; ?>
         </div>
     </div><!-- /container -->
-
-<?php echo $closure; ?>
-
-</body>
-</html>
