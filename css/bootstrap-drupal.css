@@ -3,11 +3,11 @@
  */
 
 /* Fix position of fixed navigation bar. */
-body.admin-menu .navbar-fixed-top {
-    top: 26px;
+body.toolbar .navbar-fixed-top {
+    top: 30px;
 }
-.navbar-fixed-top, .navbar-fixed-bottom {
-    z-index: 900;
+body.toolbar-drawer .navbar-fixed-top {
+    top: 65px;
 }
 
 /* Fix margins. */
@@ -16,11 +16,8 @@ body.admin-menu .navbar-fixed-top {
 }
 
 /* Fix body padding for navigation bar. */
-body {
-    padding-top: 56px;
-}
-body.admin-menu {
-    padding-top: 76px;
+#site-wrapper {
+    margin-top: 40px;
 }
 
 /* Fix for inline forms. */
