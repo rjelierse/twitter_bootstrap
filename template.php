@@ -35,6 +35,15 @@ function twitter_bootstrap_theme($existing, $type, $theme, $page)
  */
 function twitter_bootstrap_preprocess_page(&$variables)
 {
+    // Set layout based on regions.
+    if (!empty($variables['page']['left'])) {
+        $variables['layout'] = 'left';
+    }
+    if (!empty($variables['page']['right'])) {
+        $variables['layout'] = $variables['layout'] == 'left' ? 'both' : 'right';
+    }
+
+    // Set content div class.
     switch ($variables['layout']) {
         case 'both':
             $variables['content_class'] = 'span6';
@@ -228,8 +237,9 @@ function twitter_bootstrap_table($header, $rows, $attributes = array(), $caption
  * @return string
  *     The rendered mark.
  */
-function twitter_bootstrap_mark($type = MARK_NEW)
+function twitter_bootstrap_mark($variables)
 {
+    $type = $variables['type'];
     global $user;
 
     if ($user->uid) {
@@ -275,14 +285,16 @@ function twitter_bootstrap_node_filters($element)
 /**
  * Inline filters widget.
  *
- * @param array $element
- *     The filters element.
+ * @param array $variables
+ *     An associative array containing all variables for this theme function:
+ *       - $element: The filters element.
  *
  * @return string
  *     The rendered filters widget.
  */
-function twitter_bootstrap_inline_filters($element)
+function twitter_bootstrap_inline_filters($variables)
 {
+    $element = $variables['element'];
     $output = '<ul class="unstyled filter-inline">';
 
     // Render applied filters first.
