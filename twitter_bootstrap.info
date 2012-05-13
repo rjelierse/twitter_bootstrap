@@ -25,11 +25,3 @@ regions[left] = Left sidebar
 regions[right] = Right sidebar
 ;regions[header] = Header
 ;regions[footer] = Footer
-
-; Define features
-features[] = logo
-features[] = name
-features[] = slogan
-features[] = mission
-features[] = search
-features[] = primary_links
