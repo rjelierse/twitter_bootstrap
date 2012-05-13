@@ -29,6 +29,11 @@ body.toolbar-drawer .navbar-fixed-top {
     *zoom: 1;
 }
 
+/* Fix: autocomplete form element. */
+html.js input.form-autocomplete {
+    background-position: 100% 7px;
+}
+
 /* Horizontal lists. */
 ul.horizontal li {
     float: left;
