@@ -87,8 +87,6 @@ function twitter_bootstrap_form_element($variables)
 {
     $element = &$variables['element'];
 
-    dpm($element, 'form-element');
-
     // Check if element is part of a group (e.g. generated from #type 'radios' or 'checkboxes')
     $parent = count($element['#array_parents']) - 1;
     if ($element['#array_parents'][$parent] != $element['#name']) {
